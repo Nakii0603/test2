@@ -4,8 +4,8 @@ import User from "../models/User.js";
 
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
-    if (!name || !email || !password) {
+    const { email, password } = req.body;
+    if (!email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
     const existingUser = await User.findOne({ email });
@@ -14,7 +14,6 @@ export const registerUser = async (req, res) => {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
-      name,
       email,
       password: hashedPassword,
     });
@@ -25,7 +24,7 @@ export const registerUser = async (req, res) => {
     res.status(201).json({
       message: "User registered successfully",
       token,
-      user: { name: newUser.name, email: newUser.email },
+      user: {email: newUser.email },
     });
   } catch (error) {
     console.error(error);
@@ -51,7 +50,7 @@ export const loginUser = async (req, res) => {
     res.status(200).json({
       message: "Login successful",
       token,
-      user: { name: user.name, email: user.email },
+      user: { email: user.email },
     });
   } catch (error) {
     console.error(error);

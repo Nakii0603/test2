@@ -1,9 +1,9 @@
 import User from "../models/User.js";
 export const addUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { email, password } = req.body;
 
-    if (!name || !email || !password) {
+    if (!email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -13,7 +13,6 @@ export const addUser = async (req, res) => {
     }
 
     const newUser = new User({
-      name,
       email,
       password,
     });
@@ -21,7 +20,7 @@ export const addUser = async (req, res) => {
     await newUser.save();
     res.status(201).json({
       message: "User created successfully",
-      user: { name: newUser.name, email: newUser.email },
+      user: {email: newUser.email },
     });
   } catch (error) {
     console.error("Error adding user:", error);
@@ -37,7 +36,7 @@ export const getUserData = async (req, res) => {
     }
 
     res.status(200).json({
-      user: { name: user.name, email: user.email },
+      user: {email: user.email },
     });
   } catch (error) {
     console.error("Error fetching user data:", error);
